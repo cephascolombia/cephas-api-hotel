@@ -20,7 +20,6 @@ namespace Hotel.Application.DTOs.Customers
         public string? Address { get; set; }
         public string? Notes { get; set; }
 
-        [Required(ErrorMessage = "El estado de actividad es obligatorio.")]
-        public bool IsActive { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

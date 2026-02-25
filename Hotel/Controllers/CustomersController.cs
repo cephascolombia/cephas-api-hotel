@@ -41,18 +41,23 @@ namespace Hotel.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCustomerDto dto)
         {
-            // El ApiController ya validó que el DTO no sea nulo y cumpla los DataAnnotations
-            var customerId = await _customerService.CreateAsync(dto);
+            var result = await _customerService.CreateAsync(dto);
 
-            // Devolvemos 201 Created y la URL para consultar el nuevo cliente
-            return CreatedAtAction(nameof(GetById), new { id = customerId }, dto);
+            if (!result.Succeeded)
+                return BadRequest(result.Message);
+
+            return CreatedAtAction(nameof(GetById), new { id = result.Data }, dto);
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCustomerDto dto)
         {
-            var updated = await _customerService.UpdateAsync(id, dto);
-            if (!updated) return NotFound();
+            var result = await _customerService.UpdateAsync(id, dto);
+
+            if (!result.Succeeded)
+                return result.Message == "Cliente no encontrado." 
+                    ? NotFound() 
+                    : BadRequest(result.Message);
 
             return NoContent();
         }
@@ -60,8 +65,12 @@ namespace Hotel.API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _customerService.DeleteAsync(id);
-            if (!deleted) return NotFound();
+            var result = await _customerService.DeleteAsync(id);
+
+            if (!result.Succeeded)
+                return result.Message == "Cliente no encontrado." 
+                    ? NotFound() 
+                    : BadRequest(result.Message);
 
             return NoContent();
         }
