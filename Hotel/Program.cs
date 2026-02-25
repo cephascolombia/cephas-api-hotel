@@ -33,6 +33,20 @@ builder.Services.AddScoped<IReservationStatusService, ReservationStatusService>(
 builder.Services.AddScoped<IPaymentStatusService, PaymentStatusService>();
 
 // ===============================
+// CORS
+// ===============================
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+// ===============================
 // Controllers
 // ===============================
 builder.Services.AddControllers();
@@ -72,6 +86,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS
+app.UseCors("AllowAngularApp");
+
 app.UseAuthorization();
 app.MapControllers();
 
