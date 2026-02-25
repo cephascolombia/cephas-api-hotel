@@ -8,7 +8,7 @@ namespace Hotel.API.Controllers.v1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/reservation-statuses")]
     [ApiController]
-    public class ReservationStatusesController : ControllerBase
+    public class ReservationStatusesController : ApiControllerBase
     {
         private readonly IReservationStatusService _statusService;
 
@@ -28,7 +28,10 @@ namespace Hotel.API.Controllers.v1
         public async Task<ActionResult<ReservationStatusDto>> GetById(int id)
         {
             var result = await _statusService.GetByIdAsync(id);
-            if (result == null) return NotFound(new { Message = $"Estado con ID {id} no encontrado." });
+            if (result == null) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = $"Estado con ID {id} no encontrado.", 
+                Error = null });
 
             return Ok(result);
         }
@@ -44,7 +47,10 @@ namespace Hotel.API.Controllers.v1
         public async Task<IActionResult> Update(int id, [FromBody] CreateReservationStatusDto dto)
         {
             var updated = await _statusService.UpdateAsync(id, dto);
-            if (!updated) return NotFound();
+            if (!updated) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = "Estado de reserva no encontrado.", 
+                Error = null });
 
             return NoContent();
         }
@@ -53,7 +59,10 @@ namespace Hotel.API.Controllers.v1
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _statusService.DeleteAsync(id);
-            if (!deleted) return NotFound();
+            if (!deleted) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = "Estado de reserva no encontrado.", 
+                Error = null });
 
             return NoContent();
         }

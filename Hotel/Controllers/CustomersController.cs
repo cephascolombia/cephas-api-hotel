@@ -8,7 +8,7 @@ namespace Hotel.API.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/customers")]
-    public class CustomersController : ControllerBase
+    public class CustomersController : ApiControllerBase
     {
         private readonly ICustomerService _customerService;
 
@@ -33,7 +33,15 @@ namespace Hotel.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var customer = await _customerService.GetByIdAsync(id);
-            if (customer == null) return NotFound();
+            if (customer == null)
+            {
+                return NotFound(new ApiErrorResponse 
+                { 
+                    Status = 404, 
+                    Message = "Cliente no encontrado.", 
+                    Error = null 
+                });
+            }
 
             return Ok(customer);
         }
@@ -44,7 +52,7 @@ namespace Hotel.API.Controllers
             var result = await _customerService.CreateAsync(dto);
 
             if (!result.Succeeded)
-                return BadRequest(result.Message);
+                return HandleFailure(result);
 
             return CreatedAtAction(nameof(GetById), new { id = result.Data }, dto);
         }
@@ -55,9 +63,7 @@ namespace Hotel.API.Controllers
             var result = await _customerService.UpdateAsync(id, dto);
 
             if (!result.Succeeded)
-                return result.Message == "Cliente no encontrado." 
-                    ? NotFound() 
-                    : BadRequest(result.Message);
+                return HandleFailure(result);
 
             return NoContent();
         }
@@ -68,9 +74,7 @@ namespace Hotel.API.Controllers
             var result = await _customerService.DeleteAsync(id);
 
             if (!result.Succeeded)
-                return result.Message == "Cliente no encontrado." 
-                    ? NotFound() 
-                    : BadRequest(result.Message);
+                return HandleFailure(result);
 
             return NoContent();
         }

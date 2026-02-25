@@ -35,12 +35,11 @@ namespace Hotel.API.Middleware
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var response = new
+            var response = new Hotel.Application.DTOs.Common.ApiErrorResponse
             {
-                StatusCode = context.Response.StatusCode,
+                Status = context.Response.StatusCode,
                 Message = exception.Message,
-                // Solo mostrar detalle técnico si no es un error de negocio
-                Detail = exception is BusinessException ? null : "Ocurrió un error interno en el servidor."
+                Error = exception is BusinessException ? null : "Ocurrió un error interno en el servidor."
             };
 
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

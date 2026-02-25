@@ -8,7 +8,7 @@ namespace Hotel.API.Controllers.v1
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/payment-statuses")]
     [ApiController]
-    public class PaymentStatusesController : ControllerBase
+    public class PaymentStatusesController : ApiControllerBase
     {
         private readonly IPaymentStatusService _statusService;
 
@@ -27,7 +27,7 @@ namespace Hotel.API.Controllers.v1
         public async Task<ActionResult<PaymentStatusDto>> GetById(int id)
         {
             var result = await _statusService.GetByIdAsync(id);
-            if (result == null) return NotFound();
+            if (result == null) return NotFound(new ApiErrorResponse { Status = 404, Message = "Estado de pago no encontrado.", Error = null });
             return Ok(result);
         }
 
@@ -42,14 +42,22 @@ namespace Hotel.API.Controllers.v1
         public async Task<IActionResult> Update(int id, [FromBody] CreatePaymentStatusDto dto)
         {
             var updated = await _statusService.UpdateAsync(id, dto);
-            return updated ? NoContent() : NotFound();
+            if (!updated) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = "Estado de pago no encontrado.", 
+                Error = null });
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _statusService.DeleteAsync(id);
-            return deleted ? NoContent() : NotFound();
+            if (!deleted) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = "Estado de pago no encontrado.", 
+                Error = null });
+            return NoContent();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Hotel.API.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/amenities")]
-    public class AmenitiesController : ControllerBase
+    public class AmenitiesController : ApiControllerBase
     {
         private readonly IAmenityService _amenityService;
 
@@ -28,7 +28,10 @@ namespace Hotel.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var amenity = await _amenityService.GetByIdAsync(id);
-            if (amenity == null) return NotFound();
+            if (amenity == null) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = "Amenidad no encontrada.", 
+                Error = null });
 
             return Ok(amenity);
         }
@@ -48,7 +51,10 @@ namespace Hotel.API.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] CreateAmenityDto dto)
         {
             var updated = await _amenityService.UpdateAsync(id, dto);
-            if (!updated) return NotFound();
+            if (!updated) return NotFound(new ApiErrorResponse { 
+                Status = 404, 
+                Message = "Amenidad no encontrada.", 
+                Error = null });
 
             return NoContent();
         }
@@ -58,7 +64,7 @@ namespace Hotel.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _amenityService.DeleteAsync(id);
-            if (!deleted) return NotFound();
+            if (!deleted) return NotFound(new ApiErrorResponse { Status = 404, Message = "Amenidad no encontrada.", Error = null });
 
             return NoContent();
         }
