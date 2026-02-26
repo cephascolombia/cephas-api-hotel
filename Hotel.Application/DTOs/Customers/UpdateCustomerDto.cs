@@ -4,6 +4,8 @@ namespace Hotel.Application.DTOs.Customers
 {
     public class UpdateCustomerDto
     {
+        public int CustomerId { get; set; }
+
         [Required(ErrorMessage = "El nombre completo es obligatorio.")]
         [StringLength(150, MinimumLength = 3, 
             ErrorMessage = "El nombre debe tener entre 3 y 150 caracteres.")]

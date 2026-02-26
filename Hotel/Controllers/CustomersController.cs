@@ -60,6 +60,16 @@ namespace Hotel.API.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCustomerDto dto)
         {
+            if (dto.CustomerId != 0 && id != dto.CustomerId)
+            {
+                return BadRequest(new ApiErrorResponse
+                {
+                    Status = 400,
+                    Message = "El ID del cliente en la URL no coincide con el ID del cuerpo de la solicitud.",
+                    Error = null
+                });
+            }
+
             var result = await _customerService.UpdateAsync(id, dto);
 
             if (!result.Succeeded)

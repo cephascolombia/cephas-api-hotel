@@ -164,8 +164,9 @@ namespace Hotel.Application.Services
                 return ProcessResult<bool>.Failure("Cliente no encontrado.");
 
             // 1. Validación de Email duplicado (excluyendo al cliente actual)
+            var emailLower = dto.Email.ToLower().Trim();
             var (_, totalEmail) = await _repository.GetPagedAsync(
-                1, 1, c => c.Email == dto.Email && c.CustomerId != id);
+                1, 1, c => c.Email.ToLower() == emailLower && c.CustomerId != id);
 
             if (totalEmail > 0)
             {
@@ -176,8 +177,9 @@ namespace Hotel.Application.Services
             // 2. Validación de IdentityDocument duplicado (si se provee)
             if (!string.IsNullOrWhiteSpace(dto.IdentityDocument))
             {
+                var docLower = dto.IdentityDocument.ToLower().Trim();
                 var (_, totalDoc) = await _repository.GetPagedAsync(
-                    1, 1, c => c.IdentityDocument == dto.IdentityDocument && c.CustomerId != id);
+                    1, 1, c => c.IdentityDocument != null && c.IdentityDocument.ToLower() == docLower && c.CustomerId != id);
 
                 if (totalDoc > 0)
                 {
@@ -189,8 +191,9 @@ namespace Hotel.Application.Services
             // 3. Validación de Phone duplicado (si se provee)
             if (!string.IsNullOrWhiteSpace(dto.Phone))
             {
+                var phoneLower = dto.Phone.ToLower().Trim();
                 var (_, totalPhone) = await _repository.GetPagedAsync(
-                    1, 1, c => c.Phone == dto.Phone && c.CustomerId != id);
+                    1, 1, c => c.Phone != null && c.Phone.ToLower() == phoneLower && c.CustomerId != id);
 
                 if (totalPhone > 0)
                 {
