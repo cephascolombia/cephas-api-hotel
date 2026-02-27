@@ -12,14 +12,28 @@ namespace Hotel.Application.Services
     public class RoomAmenitiesImagesService : IRoomAmenitiesImagesService
     {
         private readonly IRoomAmenitiesImagesRepository _repository;
+        private readonly IAmenityService _amenityService;
 
-        public RoomAmenitiesImagesService(IRoomAmenitiesImagesRepository repository)
+        public RoomAmenitiesImagesService(IRoomAmenitiesImagesRepository repository, IAmenityService amenityService)
         {
             _repository = repository;
+            _amenityService = amenityService;
         }
 
         public async Task<int> CreateAsync(CreateRoomFullDto dto)
         {
+            if (dto.Amenities != null && dto.Amenities.Any())
+            {
+                foreach (var amenityId in dto.Amenities)
+                {
+                    var amenity = await _amenityService.GetByIdAsync(amenityId);
+                    if (amenity == null)
+                    {
+                        throw new System.Exception($"La amenidad con ID {amenityId} no existe.");
+                    }
+                }
+            }
+
             return await _repository.CreateAsync(
                 dto.Name,
                 dto.PricePerNight,
@@ -33,6 +47,18 @@ namespace Hotel.Application.Services
 
         public async Task<bool> UpdateAsync(int id, UpdateRoomFullDto dto)
         {
+            if (dto.Amenities != null && dto.Amenities.Any())
+            {
+                foreach (var amenityId in dto.Amenities)
+                {
+                    var amenity = await _amenityService.GetByIdAsync(amenityId);
+                    if (amenity == null)
+                    {
+                        throw new System.Exception($"La amenidad con ID {amenityId} no existe.");
+                    }
+                }
+            }
+
             var amenitiesJson = dto.Amenities != null ? JsonSerializer.Serialize(dto.Amenities) : "[]";
             var imagesJson = dto.Images != null ? JsonSerializer.Serialize(dto.Images) : "[]";
 
