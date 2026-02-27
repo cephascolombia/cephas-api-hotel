@@ -26,8 +26,10 @@ builder.Services.AddDbContext<HotelDbContext>(options =>
 // ===============================
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IRoomAmenitiesImagesRepository, RoomAmenitiesImagesRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IRoomAmenitiesImagesService, RoomAmenitiesImagesService>();
 builder.Services.AddScoped<IAmenityService, AmenityService>();
 builder.Services.AddScoped<IReservationStatusService, ReservationStatusService>();
 builder.Services.AddScoped<IPaymentStatusService, PaymentStatusService>();
