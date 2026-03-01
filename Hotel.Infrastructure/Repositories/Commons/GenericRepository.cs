@@ -28,6 +28,11 @@ namespace Hotel.Infrastructure.Repositories.Commons
             return await _dbSet.FindAsync(id);
         }
 
+        public async Task<T?> GetByConditionIgnoringFiltersAsync(Expression<Func<T, bool>> filter)
+        {
+            return await _dbSet.IgnoreQueryFilters().FirstOrDefaultAsync(filter);
+        }
+
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);

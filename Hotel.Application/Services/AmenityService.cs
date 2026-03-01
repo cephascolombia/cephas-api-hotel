@@ -40,13 +40,14 @@ namespace Hotel.Application.Services
 
         public async Task<AmenityDto?> GetByIdAsync(int id)
         {
-            var amenity = await _repository.GetByIdAsync(id);
+            var amenity = await _repository.GetByConditionIgnoringFiltersAsync(a => a.AmenityId == id);
             if (amenity == null) return null;
 
             return new AmenityDto
             {
                 AmenityId = amenity.AmenityId,
-                Name = amenity.Name
+                Name = amenity.Name,
+                IsActive = amenity.IsActive
             };
         }
 
@@ -68,7 +69,8 @@ namespace Hotel.Application.Services
                 Data = data.Select(a => new AmenityDto
                 {
                     AmenityId = a.AmenityId,
-                    Name = a.Name
+                    Name = a.Name,
+                    IsActive = a.IsActive
                 }),
                 TotalRecords = total,
                 Page = request.Page,

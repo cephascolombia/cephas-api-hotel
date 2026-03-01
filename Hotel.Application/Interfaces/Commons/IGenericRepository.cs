@@ -12,6 +12,7 @@ namespace Hotel.Application.Interfaces.Commons
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null 
         );
         Task<T?> GetByIdAsync(int id);
+        Task<T?> GetByConditionIgnoringFiltersAsync(Expression<Func<T, bool>> filter);
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);

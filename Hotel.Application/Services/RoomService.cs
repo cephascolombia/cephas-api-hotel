@@ -23,6 +23,7 @@ namespace Hotel.Application.Services
                 Capacity = dto.Capacity,
                 Description = dto.Description,
                 CreatedBy = dto.CreatedBy,
+                IsWorking = dto.IsWorking,
                 IsActive = true
             };
 
@@ -51,7 +52,8 @@ namespace Hotel.Application.Services
                     PricePerNight = r.PricePerNight,
                     Capacity = r.Capacity,
                     Description = r.Description,
-                    IsActive = r.IsActive
+                    IsActive = r.IsActive,
+                    IsWorking = r.IsWorking
                 }),
                 TotalRecords = total,
                 Page = request.Page,
@@ -71,7 +73,8 @@ namespace Hotel.Application.Services
                 PricePerNight = room.PricePerNight,
                 Capacity = room.Capacity,
                 Description = room.Description,
-                IsActive = room.IsActive
+                IsActive = room.IsActive,
+                IsWorking = room.IsWorking
             };
         }
 
@@ -84,6 +87,7 @@ namespace Hotel.Application.Services
             room.PricePerNight = dto.PricePerNight;
             room.Capacity = dto.Capacity;
             room.Description = dto.Description;
+            room.IsWorking = dto.IsWorking;
 
             await _repository.UpdateAsync(room);
             return true;

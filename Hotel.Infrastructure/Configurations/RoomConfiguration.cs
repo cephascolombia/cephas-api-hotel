@@ -43,6 +43,11 @@ namespace Hotel.Infrastructure.Configurations
                    .HasDefaultValue(true)
                    .IsRequired();
 
+            builder.Property(r => r.IsWorking)
+                   .HasColumnName("is_working")
+                   .HasDefaultValue(true)
+                   .IsRequired();
+
             builder.Property(r => r.CreatedDate)
                    .HasColumnName("created_date")
                    .HasConversion(

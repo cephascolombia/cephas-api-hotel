@@ -10,6 +10,7 @@ namespace Hotel.Domain.Entities
         public int Capacity { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; }
+        public bool IsWorking { get; set; } = true;
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
     }

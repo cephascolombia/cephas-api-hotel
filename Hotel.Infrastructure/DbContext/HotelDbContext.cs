@@ -15,6 +15,8 @@ namespace Hotel.Infrastructure.DbContext
         public DbSet<Amenity> Amenities => Set<Amenity>();
         public DbSet<ReservationStatus> ReservationStatuses => Set<ReservationStatus>();
         public DbSet<PaymentStatus> PaymentStatuses => Set<PaymentStatus>();
+        public DbSet<Reservation> Reservations => Set<Reservation>();
+        public DbSet<Payment> Payments => Set<Payment>();
 
         // Sobrescribimos el método de guardado para que CreateDate sea automático en tablas
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -59,6 +61,14 @@ namespace Hotel.Infrastructure.DbContext
 
             // PaymentStatus
             modelBuilder.Entity<PaymentStatus>().HasQueryFilter(x => x.IsActive);
+
+            // Reservations
+            modelBuilder.Entity<Reservation>()
+                .HasQueryFilter(r => r.IsActive);
+
+            // Payments
+            modelBuilder.Entity<Payment>()
+                .HasQueryFilter(p => p.IsActive);
 
             // Configura todas las propiedades DateTime para que siempre sean UTC
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

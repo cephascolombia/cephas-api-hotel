@@ -15,5 +15,6 @@ namespace Hotel.Application.DTOs.Rooms
 
         public string? Description { get; set; }
         public string CreatedBy { get; set; } = "Admin";
+        public bool IsWorking { get; set; } = true;
     }
 }

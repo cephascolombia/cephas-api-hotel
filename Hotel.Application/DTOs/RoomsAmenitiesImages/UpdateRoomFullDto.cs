@@ -15,6 +15,8 @@ namespace Hotel.Application.DTOs.RoomsAmenitiesImages
 
         public string Description { get; set; } = string.Empty;
 
+        public bool IsWorking { get; set; }
+
         public List<int>? Amenities { get; set; }
         
         public List<string>? Images { get; set; }

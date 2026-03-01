@@ -12,6 +12,7 @@ namespace Hotel.Application.Interfaces.Repositories
             string createdBy, 
             int capacity, 
             string description, 
+            bool isWorking,
             int[]? amenities, 
             string[]? images);
             
@@ -21,6 +22,7 @@ namespace Hotel.Application.Interfaces.Repositories
             decimal pricePerNight, 
             int capacity, 
             string description, 
+            bool isWorking,
             string amenitiesJson, 
             string imagesJson);
             
@@ -47,6 +49,7 @@ namespace Hotel.Application.Interfaces.Repositories
         public int capacity { get; set; }
         public string description { get; set; } = string.Empty;
         public bool is_active { get; set; }
+        public bool is_working { get; set; }
         public System.DateTime created_date { get; set; }
         public string created_by { get; set; } = string.Empty;
         public string? amenities { get; set; }
@@ -61,6 +64,7 @@ namespace Hotel.Application.Interfaces.Repositories
         public int capacity { get; set; }
         public string description { get; set; } = string.Empty;
         public bool is_available { get; set; }
+        public bool is_working { get; set; }
         public string? amenities { get; set; }
         public string? images { get; set; }
         public int total_records { get; set; }

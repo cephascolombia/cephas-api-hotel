@@ -23,6 +23,7 @@ namespace Hotel.Infrastructure.Repositories
             string createdBy, 
             int capacity, 
             string description, 
+            bool isWorking,
             int[]? amenities, 
             string[]? images)
         {
@@ -35,12 +36,13 @@ namespace Hotel.Infrastructure.Repositories
                 : null;
 
             var result = await _context.Database.SqlQueryRaw<int>(
-                "SELECT fn_hotel_c_room_amenities_images({0}, {1}, {2}, {3}, {4}, {5}::integer[], {6}::text[]) AS \"Value\"",
+                "SELECT fn_hotel_c_room_amenities_images({0}, {1}, {2}, {3}, {4}, {5}, {6}::integer[], {7}::text[]) AS \"Value\"",
                 name,
                 pricePerNight,
                 createdBy,
                 capacity,
                 description,
+                isWorking,
                 amenitiesParam,
                 imagesParam
             ).FirstOrDefaultAsync();
@@ -54,6 +56,7 @@ namespace Hotel.Infrastructure.Repositories
             decimal pricePerNight, 
             int capacity, 
             string description, 
+            bool isWorking,
             string amenitiesJson, 
             string imagesJson)
         {
@@ -65,7 +68,7 @@ namespace Hotel.Infrastructure.Repositories
                     await connection.OpenAsync();
 
                 using var command = connection.CreateCommand();
-                command.CommandText = "SELECT fn_hotel_u_room_amenities_images(@roomId, @name, @pricePerNight, @capacity, @description, @amenitiesJson::json, @imagesJson::json)";
+                command.CommandText = "SELECT fn_hotel_u_room_amenities_images(@roomId, @name, @pricePerNight, @capacity, @description, @isWorking, @amenitiesJson::json, @imagesJson::json)";
                 
                 void AddParam(string paramName, object? value)
                 {
@@ -80,6 +83,7 @@ namespace Hotel.Infrastructure.Repositories
                 AddParam("@pricePerNight", pricePerNight);
                 AddParam("@capacity", capacity);
                 AddParam("@description", description);
+                AddParam("@isWorking", isWorking);
                 AddParam("@amenitiesJson", amenitiesJson);
                 AddParam("@imagesJson", imagesJson);
 
@@ -147,6 +151,7 @@ namespace Hotel.Infrastructure.Repositories
                         capacity = reader.GetInt32(reader.GetOrdinal("capacity")),
                         description = reader.IsDBNull(reader.GetOrdinal("description")) ? string.Empty : reader.GetString(reader.GetOrdinal("description")),
                         is_active = reader.GetBoolean(reader.GetOrdinal("is_active")),
+                        is_working = reader.GetBoolean(reader.GetOrdinal("is_working")),
                         created_date = reader.GetDateTime(reader.GetOrdinal("created_date")),
                         created_by = reader.IsDBNull(reader.GetOrdinal("created_by")) ? string.Empty : reader.GetString(reader.GetOrdinal("created_by")),
                         amenities = reader.IsDBNull(reader.GetOrdinal("amenities")) ? null : reader.GetValue(reader.GetOrdinal("amenities")).ToString(),
@@ -212,6 +217,7 @@ namespace Hotel.Infrastructure.Repositories
                         capacity = reader.GetInt32(reader.GetOrdinal("capacity")),
                         description = reader.IsDBNull(reader.GetOrdinal("description")) ? string.Empty : reader.GetString(reader.GetOrdinal("description")),
                         is_available = reader.GetBoolean(reader.GetOrdinal("is_available")),
+                        is_working = reader.GetBoolean(reader.GetOrdinal("is_working")),
                         amenities = reader.IsDBNull(reader.GetOrdinal("amenities")) ? null : reader.GetValue(reader.GetOrdinal("amenities")).ToString(),
                         images = reader.IsDBNull(reader.GetOrdinal("images")) ? null : reader.GetValue(reader.GetOrdinal("images")).ToString(),
                         total_records = Convert.ToInt32(reader.GetValue(reader.GetOrdinal("total_records")))

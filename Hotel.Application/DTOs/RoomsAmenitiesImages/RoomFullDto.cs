@@ -10,6 +10,7 @@ namespace Hotel.Application.DTOs.RoomsAmenitiesImages
         public int Capacity { get; set; }
         public string Description { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public bool IsWorking { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
         public List<RoomAmenityDto> Amenities { get; set; } = new();
@@ -24,6 +25,7 @@ namespace Hotel.Application.DTOs.RoomsAmenitiesImages
         public int Capacity { get; set; }
         public string Description { get; set; } = string.Empty;
         public bool IsAvailable { get; set; }
+        public bool IsWorking { get; set; }
         public List<RoomAmenityDto> Amenities { get; set; } = new();
         public List<RoomImageListDto> Images { get; set; } = new();
     }

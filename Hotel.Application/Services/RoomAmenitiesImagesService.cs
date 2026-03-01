@@ -31,6 +31,10 @@ namespace Hotel.Application.Services
                     {
                         throw new System.Exception($"La amenidad con ID {amenityId} no existe.");
                     }
+                    if (!amenity.IsActive)
+                    {
+                        throw new System.Exception($"La amenidad con ID {amenityId} esta desactivada");
+                    }
                 }
             }
 
@@ -40,6 +44,7 @@ namespace Hotel.Application.Services
                 dto.CreatedBy,
                 dto.Capacity,
                 dto.Description,
+                dto.IsWorking,
                 dto.Amenities?.ToArray(),
                 dto.Images?.ToArray()
             );
@@ -47,6 +52,12 @@ namespace Hotel.Application.Services
 
         public async Task<bool> UpdateAsync(int id, UpdateRoomFullDto dto)
         {
+            var existingRoom = await GetByIdAsync(id);
+            if (existingRoom == null)
+            {
+                throw new System.Exception($"El Id {id} de habitacion no existe");
+            }
+
             if (dto.Amenities != null && dto.Amenities.Any())
             {
                 foreach (var amenityId in dto.Amenities)
@@ -55,6 +66,10 @@ namespace Hotel.Application.Services
                     if (amenity == null)
                     {
                         throw new System.Exception($"La amenidad con ID {amenityId} no existe.");
+                    }
+                    if (!amenity.IsActive)
+                    {
+                        throw new System.Exception($"La amenidad con ID {amenityId} esta desactivada");
                     }
                 }
             }
@@ -68,6 +83,7 @@ namespace Hotel.Application.Services
                 dto.PricePerNight,
                 dto.Capacity,
                 dto.Description,
+                dto.IsWorking,
                 amenitiesJson,
                 imagesJson
             );
@@ -94,6 +110,7 @@ namespace Hotel.Application.Services
                 Capacity = result.capacity,
                 Description = result.description,
                 IsActive = result.is_active,
+                IsWorking = result.is_working,
                 CreatedDate = result.created_date,
                 CreatedBy = result.created_by,
                 Amenities = !string.IsNullOrEmpty(result.amenities) && result.amenities != "null"
@@ -127,6 +144,7 @@ namespace Hotel.Application.Services
                 Capacity = r.capacity,
                 Description = r.description,
                 IsAvailable = r.is_available,
+                IsWorking = r.is_working,
                 Amenities = !string.IsNullOrEmpty(r.amenities) && r.amenities != "null"
                     ? JsonSerializer.Deserialize<List<RoomAmenityDto>>(r.amenities) ?? new()
                     : new(),

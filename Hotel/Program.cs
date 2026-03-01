@@ -33,6 +33,8 @@ builder.Services.AddScoped<IRoomAmenitiesImagesService, RoomAmenitiesImagesServi
 builder.Services.AddScoped<IAmenityService, AmenityService>();
 builder.Services.AddScoped<IReservationStatusService, ReservationStatusService>();
 builder.Services.AddScoped<IPaymentStatusService, PaymentStatusService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 // ===============================
 // CORS
